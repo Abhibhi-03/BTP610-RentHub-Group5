@@ -24,7 +24,7 @@ import * as Location from 'expo-location';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const { user } = userAuthentication(); // ✅ use custom hook
+  const { user } = userAuthentication(); // use custom hook
   const [userRole, setUserRole] = useState(null); // "tenant" or "landlord"
   const [loading, setLoading] = useState(true);
 
