@@ -166,6 +166,6 @@ const styles = StyleSheet.create({
 
   backText: {
     fontSize: 18,
-    color: '#10ac84',
+    color: '#4B89AC',
   }
 });
