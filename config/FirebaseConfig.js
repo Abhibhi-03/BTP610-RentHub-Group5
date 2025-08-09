@@ -9,13 +9,13 @@ import { getStorage } from 'firebase/storage';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAOyRiXcvTEHSnQCiE7DWThbUSWnCU3uo8",
-  authDomain: "rental-app-btp610.firebaseapp.com",
-  databaseURL: "https://rental-app-btp610-default-rtdb.firebaseio.com",
-  projectId: "rental-app-btp610",
-  storageBucket: "rental-app-btp610.firebasestorage.app",
-  messagingSenderId: "761622505160",
-  appId: "1:761622505160:web:e7156dd4462a734242e7fd"
+  apiKey: " ",
+  authDomain: " ",
+  databaseURL: " ",
+  projectId: " ",
+  storageBucket: " ",
+  messagingSenderId: " ",
+  appId: ""
 };
 
 // Initialize Firebase
