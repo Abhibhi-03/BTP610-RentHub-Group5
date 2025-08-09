@@ -14,6 +14,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import { firebaseAuth, firebaseDB, firebaseStorage } from '../../config/FirebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import { getDownloadURL } from 'firebase/storage';
 import { ref, uploadBytesResumable } from "firebase/storage";
 import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
