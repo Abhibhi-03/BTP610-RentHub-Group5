@@ -16,6 +16,11 @@ import MyListingsScreen from './screens/landlord/MyListingScreen';
 import EditListingScreen from './screens/landlord/EditListingScreen';
 import ViewRequestsScreen from './screens/landlord/ViewRequestsScreen'; 
 import AccountInfoScreen from './screens/AccountInfoScreen';
+import MyShortlistScreen from './screens/tenant/MyShortlistScreen';
+import MapScreen from './screens/tenant/MapScreen';
+import PropertyDetailScreen from './screens/tenant/PropertyDetailScreen';
+
+
 
 
 import * as Location from 'expo-location';
@@ -24,7 +29,7 @@ import * as Location from 'expo-location';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const { user } = userAuthentication(); // use custom hook
+  const { user } = userAuthentication();
   const [userRole, setUserRole] = useState(null); // "tenant" or "landlord"
   const [loading, setLoading] = useState(true);
 
@@ -64,7 +69,6 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {/* <Stack.Navigator screenOptions={{ headerShown: false }}> */}
         <Stack.Navigator key={user?.uid || 'guest'} screenOptions={{ headerShown: false }}>
         {!userRole ? (
           <>
@@ -82,8 +86,9 @@ export default function App() {
         <Stack.Screen name="ViewRequests" component={ViewRequestsScreen} />
         <Stack.Screen name="EditListing" component={EditListingScreen} />
         <Stack.Screen name="AccountInfo" component={AccountInfoScreen} />
-
-
+        <Stack.Screen name="MyShortlist" component={MyShortlistScreen} />
+        <Stack.Screen name="MapScreen" component={MapScreen} />
+        <Stack.Screen name="PropertyDetailScreen" component={PropertyDetailScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>

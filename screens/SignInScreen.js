@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
+  ScrollView, 
 } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { firebaseAuth } from '../config/FirebaseConfig';
@@ -44,39 +45,43 @@ const SignInScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('SignUpScreen')}
-        style={styles.backButton}>
-        <Text style={styles.backText}>← Back to Sign Up</Text>
-      </TouchableOpacity>
-      <Text style={styles.header}>RentHub</Text>
-      <Text style={styles.header}>Sign In</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={form.email}
-        onChangeText={(text) => setForm({ ...form, email: text })}
-      />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('SignUpScreen')}
+          style={styles.backButton}>
+          <Text style={styles.backText}>Back</Text>
+        </TouchableOpacity>
+        
+        <Text style={styles.header}>🏠 RentHub</Text>
+        <Text style={styles.subHeader}>Sign In</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        autoCapitalize="none"
-        value={form.password}
-        onChangeText={(text) => setForm({ ...form, password: text })}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="✉️ Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={form.email}
+          onChangeText={(text) => setForm({ ...form, email: text })}
+        />
 
-      {!!form.error && <Text style={styles.errorText}>{form.error}</Text>}
-      {!!successMessage && <Text style={styles.successText}>{successMessage}</Text>}
-      {loading && <ActivityIndicator style={{ marginTop: 10 }} color="#10ac84" />}
+        <TextInput
+          style={styles.input}
+          placeholder="🔒 Password"
+          secureTextEntry
+          autoCapitalize="none"
+          value={form.password}
+          onChangeText={(text) => setForm({ ...form, password: text })}
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
+        {!!form.error && <Text style={styles.errorText}>{form.error}</Text>}
+        {!!successMessage && <Text style={styles.successText}>{successMessage}</Text>}
+
+        
+        <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+          <Text style={styles.buttonText}>➡️ Sign In</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -84,31 +89,34 @@ const SignInScreen = ({ navigation }) => {
 export default SignInScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
+  scrollContainer: {
+    paddingHorizontal: 25,
     paddingTop: 40,
-    backgroundColor: '#fff',
+    paddingBottom: 20,
   },
   backButton: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    marginBottom: 20,
   },
-  
   backText: {
     fontSize: 18,
-    color: '#10ac84',
+    color: '#4B89AC',
+    fontWeight: '600',
   },
-  
   header: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '700',
-    marginBottom: 20,
+    color: '#4B89AC',
+    textAlign: 'center',
+  },
+  subHeader: {
+    fontSize: 22,
+    fontWeight: '600',
     color: '#222f3e',
-    alignSelf: 'center',
+    textAlign: 'center',
+    marginBottom: 25,
   },
   input: {
-    borderColor: '#1dd1a1',
+    borderColor: '#4B89AC',
     borderWidth: 2,
     borderRadius: 10,
     paddingHorizontal: 15,
@@ -118,7 +126,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 25,
-    backgroundColor: '#10ac84',
+    backgroundColor: '#4B89AC',
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: 'center',
@@ -129,15 +137,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   errorText: {
-    color: 'red',
+    color: '#e74c3c',
     marginTop: 10,
     fontSize: 14,
     textAlign: 'center',
+    fontWeight: '500',
   },
   successText: {
-    color: 'green',
+    color: '#4B89AC',
     marginTop: 10,
     fontSize: 14,
     textAlign: 'center',
+    fontWeight: '500',
   },
 });

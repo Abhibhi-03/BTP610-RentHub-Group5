@@ -4,11 +4,11 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  StyleSheet
+  StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-
 import { firebaseAuth, firebaseDB } from '../../config/FirebaseConfig';
 import { userAuthentication } from '../../config/userAuthentication';
 
@@ -22,7 +22,6 @@ export default function LandlordHomeScreen({ navigation }) {
         try {
           const docRef = doc(firebaseDB, 'users', user.uid);
           const docSnap = await getDoc(docRef);
-
           if (docSnap.exists()) {
             const { name } = docSnap.data();
             setUserName(name);
@@ -41,80 +40,146 @@ export default function LandlordHomeScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Welcome{userName ? `, ${userName}` : ''}!</Text>
-      <Text style={styles.subtitle}>You’re logged in as a landlord.</Text>
-
-      <View style={styles.buttonGroup}>
-        <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('AddPropertyScreen')}>
-          <Text style={styles.buttonText}>+ Add Property</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      {/* Top header */}
+      <View style={styles.topBar}>
+        <TouchableOpacity onPress={() => navigation.navigate('AccountInfo')}>
+          <Text style={styles.profileIcon}>👤</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('MyListings')}>
-          <Text style={styles.buttonText}>My Listings</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('AccountInfo')}>
-          <Text style={styles.buttonText}>My Account</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('ViewRequests')}>
-          <Text style={styles.buttonText}>View Requests</Text>
+        <Text style={styles.header}>🏠 RentHub</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('AddPropertyScreen')}>
+          <Text style={styles.addIcon}>➕</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Sign Out</Text>
-      </TouchableOpacity>
+      {/* Scrollable content */}
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.welcome}>Welcome{userName ? `, ${userName}` : ''}!</Text>
+        <Text style={styles.subHeader}>You’re logged in as a landlord.</Text>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MyListings')}>
+          <Text style={styles.buttonText}>📋 My Listings</Text>
+        </TouchableOpacity>
+        
+      </ScrollView>
+
+      <View style={styles.footerRow}>
+        
+        <TouchableOpacity style={styles.footerButton} onPress={handleLogout}>
+          <Text style={styles.footerButtonText}>🚪 Sign Out</Text>
+        </TouchableOpacity>
+
+        
+        <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('ViewRequests')}>
+          <Text style={styles.footerButtonText}>📬 Requests</Text>
+        </TouchableOpacity>
+      </View>
+
+
     </SafeAreaView>
   );
 }
 
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 20,
-    justifyContent: 'center',
+  topBar: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: '#fff',
   },
-  title: {
+  profileIcon: {
     fontSize: 26,
-    fontWeight: '700',
-    color: '#222f3e',
-    marginBottom: 6,
   },
-  subtitle: {
+  addIcon: {
+    fontSize: 26,
+    color: '#4B89AC',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4B89AC',
+    textAlign: 'center',
+  },
+  container: {
+    paddingHorizontal: 25,
+    paddingTop: 20,
+    paddingBottom: 80, 
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  welcome: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#222f3e',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  subHeader: {
     fontSize: 16,
     color: '#576574',
     marginBottom: 30,
+    textAlign: 'center',
   },
-  buttonGroup: {
-    width: '100%',
-    gap: 15,
-    marginBottom: 40,
-  },
-  actionButton: {
-    backgroundColor: '#10ac84',
+  button: {
+    backgroundColor: '#4B89AC',
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: 'center',
+    width: '100%',
+    marginBottom: 15,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
   },
+  footer: {
+    padding: 15,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+  },
   logoutButton: {
-    backgroundColor: '#ee5253',
+    backgroundColor: '#C05C5C',
     paddingVertical: 14,
-    paddingHorizontal: 30,
     borderRadius: 10,
+    alignItems: 'center',
+    width: '100%',
   },
   logoutText: {
     color: '#fff',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  footerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+  },
+
+  footerButton: {
+    backgroundColor: '#C05C5C',
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 10,
+    alignItems: 'center',
+    flex: 1,
+    marginHorizontal: 5,
+  },
+
+  footerButtonText: {
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  }
+    textAlign: 'center',
+  },
+
+
 });

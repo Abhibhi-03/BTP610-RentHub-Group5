@@ -21,34 +21,66 @@ export default function ViewRequestsScreen({ navigation }) {
     try {
       const uid = firebaseAuth.currentUser.uid;
 
-      // Step 1: Fetch all properties for this landlord
+      //Fetching all properties for landlord
       const propertySnapshot = await getDocs(
         query(collection(firebaseDB, 'properties'), where('uid', '==', uid))
       );
       const properties = propertySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const propertyMap = {};
+      properties.forEach((property) => {
+        propertyMap[property.id] = property;
+      });
+
       const propertyIds = properties.map(p => p.id);
 
-      // Step 2: Fetch all requests for these properties
-      const requestSnapshot = await getDocs(collection(firebaseDB, 'requests'));
+      //Fetching all requests for properties
+      const requestSnapshot = await getDocs(collection(firebaseDB, 'rentalRequests'));
       const allRequests = requestSnapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .filter(req => propertyIds.includes(req.propertyId));
 
-      setRequests(allRequests);
-    } catch (err) {
-      console.error('Error fetching requests:', err);
-    }
-  };
+      const requestsWithPropertyInfo = await Promise.all(
+        allRequests.map(async (req) => {
+          let tenantInfo = null;
+
+          try {
+            const tenantRef = doc(firebaseDB, 'users', req.tenantId);
+            const tenantSnap = await getDoc(tenantRef);
+            if (tenantSnap.exists()) {
+              tenantInfo = tenantSnap.data();
+            }
+          } catch (err) {
+            console.error('Error fetching tenant info:', err);
+          }
+
+          return {
+            ...req,
+            property: propertyMap[req.propertyId] || null,
+            tenant: tenantInfo,
+          };
+        })
+      );
+
+      setRequests(requestsWithPropertyInfo);
+
+          } catch (err) {
+            console.error('Error fetching requests:', err);
+          }
+        };
 
   const updateRequestStatus = async (id, status) => {
     try {
-      await updateDoc(doc(firebaseDB, 'requests', id), { status });
+      await updateDoc(doc(firebaseDB, 'rentalRequests', id), {
+        status,
+        decidedAt: new Date(), 
+      });
       Alert.alert(`Request ${status}`);
       fetchRequests();
     } catch (err) {
       console.error('Error updating request:', err);
     }
   };
+
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', fetchRequests);
@@ -58,7 +90,7 @@ export default function ViewRequestsScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backText}>← Back</Text>
+          <Text style={styles.backText}> Back</Text>
         </TouchableOpacity>
         <Text style={styles.header}>View Requests</Text>
         
@@ -69,13 +101,20 @@ export default function ViewRequestsScreen({ navigation }) {
                 
                 requests.map((req) => (
                 <View key={req.id} style={styles.card}>
-                    <Text style={styles.text}>Property ID: {req.propertyId}</Text>
-                    <Text style={styles.text}>Tenant ID: {req.tenantId}</Text>
+                    <Text style={styles.text}>
+                      🏠 Property: {req.property?.address || 'Unknown'}
+                    </Text>
+                    <Text style={styles.text}>🏷️ Type: {req.property?.propertyType}</Text>
+                    <Text style={styles.text}>💰 Price: ${req.property?.price}</Text>
+
+                    <Text style={styles.text}>
+                      👤 Tenant: {req.tenant?.name || 'Unknown'} ({req.tenant?.email || 'No email'})
+                    </Text>
                     <Text style={styles.status}>Status: {req.status}</Text>
               {req.status === 'pending' && (
                 <View style={styles.buttonRow}>
-                  <Button title="Approve" onPress={() => updateRequestStatus(req.id, 'approved')} color="#10ac84" />
-                  <Button title="Deny" onPress={() => updateRequestStatus(req.id, 'denied')} color="#e74c3c" />
+                  <Button title="Approve" onPress={() => updateRequestStatus(req.id, 'approved')} color="#67af86ff" />
+                  <Button title="Deny" onPress={() => updateRequestStatus(req.id, 'denied')} color="#C05C5C" />
                 </View>
             )}
                 </View>
@@ -142,6 +181,6 @@ const styles = StyleSheet.create({
 
   backText: {
     fontSize: 18,
-    color: '#10ac84'
+    color: '#4B89AC'
   }
 });
