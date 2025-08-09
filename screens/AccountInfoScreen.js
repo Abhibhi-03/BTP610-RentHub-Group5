@@ -1,3 +1,4 @@
+// screens/AccountInfoScreen.js
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -14,21 +15,31 @@ export default function AccountInfoScreen({ navigation }) {
   const user = firebaseAuth.currentUser;
   const [name, setName] = useState('');
   const [email, setEmail] = useState(user?.email || '');
+  const [role, setRole] = useState(''); 
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const docSnap = await getDoc(doc(firebaseDB, 'users', user.uid));
-        if (docSnap.exists()) {
-          setName(docSnap.data().name || '');
+        if (!user) return;
+        const snap = await getDoc(doc(firebaseDB, 'users', user.uid));
+        if (snap.exists()) {
+          const data = snap.data();
+          setName(data.name || '');
+          setRole(data.role || ''); 
         }
       } catch (err) {
-        console.error('Error fetching user:', err);
+        console.log('Error fetching user:', err);
       }
     };
-
     fetchUserData();
   }, []);
+
+  const roleLine =
+    role === 'landlord'
+      ? 'You’re logged in as a landlord.'
+      : role === 'tenant'
+      ? 'You’re logged in as a tenant.'
+      : 'Role not set.';
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -37,16 +48,17 @@ export default function AccountInfoScreen({ navigation }) {
       </TouchableOpacity>
 
       <Text style={styles.header}>My Account</Text>
+      <Text style={styles.roleBadge}>{roleLine}</Text>
 
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.label}>Name</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoText}>{name}</Text>
+          <Text style={styles.infoText}>{name || '-'}</Text>
         </View>
 
         <Text style={styles.label}>Email</Text>
         <View style={styles.infoBox}>
-          <Text style={styles.infoText}>{email}</Text>
+          <Text style={styles.infoText}>{email || '-'}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -62,7 +74,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     color: '#222f3e',
-    marginBottom: 20,
+    marginBottom: 6,
+  },
+  roleBadge: {
+    textAlign: 'center',
+    color: '#576574',
+    marginBottom: 14,
+    fontSize: 15,
   },
   label: {
     fontWeight: 'bold',

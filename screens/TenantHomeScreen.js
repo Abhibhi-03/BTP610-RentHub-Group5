@@ -231,37 +231,26 @@ export default function TenantHomeScreen({ navigation }) {
   );
 }
 
-// Styles 
+// Reuse your existing styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
     padding: 20,
-  },
-
-  // Header
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-    width: '100%',
   },
   title: {
     fontSize: 23,
     fontWeight: '700',
     color: '#222f3e',
+    marginBottom: 6,
   },
-  iconButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
+  subtitle: {
+    fontSize: 16,
+    color: '#576574',
+    marginBottom: 30,
   },
-  iconText: {
-    fontSize: 20,
-  },
-
-  // Cards
   card: {
     backgroundColor: '#e7e8eeff',
     padding: 15,
@@ -286,8 +275,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#576574',
   },
-
-  // Buttons on card
   requestButton: {
     backgroundColor: '#1F4A80',
     paddingVertical: 10,
@@ -296,18 +283,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   requestButtonText: {
-    color: '#E0E0E0',
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  withdrawButton: {
-    backgroundColor: '#c1a36dff',
-    paddingVertical: 10,
-    borderRadius: 6,
-    marginTop: 8,
-    alignItems: 'center',
-  },
-  withdrawButtonText: {
     color: '#E0E0E0',
     fontSize: 15,
     fontWeight: '600',
@@ -324,28 +299,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
-
-  // Footer fixed row
-  footerRow: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
+  headerRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 46,
-  },
-  mapButton: {
-    backgroundColor: '#1F4A80',
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderRadius: 10,
+    justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
+    marginBottom: 10,
   },
-  mapButtonText: {
-    color: '#F7F7F7',
-    fontSize: 16,
-    fontWeight: '600',
+  iconButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  iconText: {
+    fontSize: 20,
+  },
+  footer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 5,
+    marginTop: 10,
   },
   logoutButton: {
     backgroundColor: '#C05C5C',
@@ -359,14 +333,48 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  footerRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: 20,
+    gap: 46,
+  },
 
-  // Approved/Denied
+  mapButton: {
+    backgroundColor: '#1F4A80',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    //flex: 1,
+    alignItems: 'center',
+  },
+  mapButtonText: {
+    color: '#F7F7F7',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   approvedButton: {
-    backgroundColor: '#67af86ff',
+    backgroundColor: '#2ecc71', 
     marginTop: 8,
   },
+
   deniedButton: {
-    backgroundColor: '#C05C5C',
+    backgroundColor: '#e74c3c',
     marginTop: 8,
   },
+
+  withdrawButton: {
+    backgroundColor: '#9A6B34',
+    paddingVertical: 10,
+    borderRadius: 6,
+    marginTop: 8,
+    alignItems: 'center',
+  },
+  withdrawButtonText: {
+    color: '#FFF',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+
 });
